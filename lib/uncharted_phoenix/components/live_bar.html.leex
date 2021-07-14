@@ -1,0 +1,32 @@
+<figure data-testid="lc-live-bar-component" role="img" aria-label="Bar chart visualizing <%= Chart.title(@chart) %>" alt="Bar chart visualizing <%= Chart.title(@chart) %>" tabindex="0"  phx-target="<%= @myself %>" phx-focus="show_table">
+  <svg class="bar-chart" width="100%" height="100%" viewBox="0 0 <%= "#{@width} #{@height}" %>" style="overflow: visible;">
+
+    <title id="barChartTitle">Bar chart visualizing <%= Chart.title(@chart) %></title>
+
+    <%= render "_color_defs.html", chart: @chart %>
+    <%= render "_bar_labels.html", chart: @chart %>
+    <%= render "_bar_grid_line_labels.html", chart: @chart, grid_lines: @grid_lines, offsetter: @offsetter %>
+    <svg class="" width="90%" height="92%" x="10%" y="0">
+      <%= if @chart.dataset.axes.show_gridlines do %>
+        <%= render "_bar_grid_lines.html", chart: @chart, grid_lines: @grid_lines, offsetter: @offsetter, axis: @axis %>
+      <% end %>
+      <%= render "_bars.html", chart: @chart, bars: @bars %>
+    </svg>
+  </svg>
+</figure>
+
+<%= tag :table, [tabindex: "0", phx_target: @myself, phx_blur: "hide_table"] ++ maybe_show_table(@always_show_table || @show_table) %>
+  <caption><%= Chart.title(@chart) %></caption>
+  <thead>
+    <tr>
+      <th scope="col">[Data Title]</th>
+      <th scope="col">[Data Title]</th>
+    </tr>
+  </thead>
+  <%= for bar <- @bars do %>
+    <tr>
+      <th scope="row"><%= bar.label %></th>
+      <td><%= bar.bar_value %></td>
+    </tr>
+  <% end %>
+</table>
